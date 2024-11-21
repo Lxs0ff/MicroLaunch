@@ -70,6 +70,7 @@ keyword = "launch"
 recognizer = sr.Recognizer()
 mute_button = tk.Button(window,command=lambda: toggle_mute(),text="Mute",height=150, width=400)
 mute_button.pack()
+txt_label = tk.TextLabel(window,text="")
 
 def toggle_mute():
     global muted
