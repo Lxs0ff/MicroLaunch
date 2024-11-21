@@ -3,6 +3,7 @@ import os
 import tkinter as tk
 import threading
 import speech_recognition as sr
+
 class AppLauncher:
     def __init__(self):
         self.desktop = os.path.join(os.path.expanduser('~'), 'Desktop')
@@ -28,11 +29,14 @@ class AppLauncher:
                 try:
                     sp.Popen(f'"{shortcut_path}"', shell=True)
                     print(f"Launched: {app_name}")
+                    txt_label.configure(text=f"Launched: {app_name}")
                     return True
                 except Exception as e:
                     print(f"Error launching {app_name}: {e}")
+                    txt_label.configure(text=f"Error launching: {app_name}")
                     return False
         print(f"No shortcut found for: {app_name}")
+        txt_label.configure(text=f"No shortcut found for: {app_name}")
         return False
 def recognize():
     global text
@@ -44,9 +48,9 @@ def recognize():
                     audio = recognizer.listen(source)
                     try:
                         text = recognizer.recognize_google(audio, language='en-US')
-                        if text.find(keyword) != -1:
-                            if text.replace(keyword,"").lower().replace(" ","",1) == "valor":text = "valorant"
-                            app.launch_app(text.replace(keyword,"").lower().replace(" ","",1))
+                        if text.find(KEYWORD) != -1:
+                            if text.replace(KEYWORD,"").lower().replace(" ","",1) == "valor":text = "valorant"
+                            app.launch_app(text.replace(KEYWORD,"").lower().replace(" ","",1))
                     except:
                         pass
 
@@ -66,11 +70,12 @@ window.resizable(False,False)
 icon_path = os.path.join(os.path.dirname(__file__), 'icon.ico')
 window.iconbitmap(icon_path)
 muted = False
-keyword = "launch"
+KEYWORD = "launch"
 recognizer = sr.Recognizer()
 mute_button = tk.Button(window,command=lambda: toggle_mute(),text="Mute",height=150, width=400)
 mute_button.pack()
-txt_label = tk.TextLabel(window,text="")
+txt_label = tk.TextLabel(window,text="Start Talking...")
+txt_label.pack()
 
 def toggle_mute():
     global muted
